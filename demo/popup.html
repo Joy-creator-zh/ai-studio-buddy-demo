@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>智能网页助手 Popup</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif; /* 更现代的字体栈 */
+      margin: 0;
+      padding: 15px; /* 稍微增加整体内边距 */
+      min-width: 320px; /* 调整最小宽度 */
+      background-color: #f8f9fa; /* 非常浅的灰色背景 */
+      color: #333;
+      text-align: left; /* 确保内容区左对齐 */
+    }
+
+    h1 {
+      font-size: 18px; /* 稍微增大 */
+      color: #2c3e50; /* 深蓝灰色 */
+      margin-top: 0;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .section {
+      margin-bottom: 20px;
+      padding: 15px; /* 增加内边距 */
+      border: none; /* 移除边框 */
+      border-radius: 8px; /* 增加圆角 */
+      background-color: #ffffff; /* 白色背景 */
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); /* 柔和阴影 */
+    }
+
+    .section h3 {
+      font-size: 15px; /* 调整大小 */
+      margin-top: 0;
+      margin-bottom: 12px;
+      color: #34495e; /* 稍深的标题颜色 */
+      font-weight: 500;
+    }
+    
+    .section p { /* 确保 section 内的 p 标签也有合适的样式 */
+      font-size: 14px;
+      margin: 8px 0; /* 调整p标签的上下间距 */
+      word-wrap: break-word;
+      line-height: 1.5; /* 增加行高以提高可读性 */
+    }
+    .section p strong {
+      color: #333;
+      font-weight: 600; /* 加强strong标签 */
+    }
+
+    textarea, input[type="text"] {
+      width: calc(100% - 18px); /* 调整宽度计算，考虑边框和内边距 */
+      padding: 8px; /* 增加内边距 */
+      border: 1px solid #dfe4ea; /* 更柔和的边框颜色 */
+      border-radius: 6px; /* 更大的圆角 */
+      margin-bottom: 10px;
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.4; /* 调整行高 */
+      transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    
+    textarea {
+      min-height: 60px; /* 增加文本域最小高度 */
+    }
+
+    textarea:focus, input[type="text"]:focus {
+      outline: none;
+      border-color: #007bff; /* 主题色高亮 */
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15); /* 调整阴影使其更柔和 */
+    }
+
+    .button-group { /* 确保按钮组有合适的布局 */
+        display: flex;
+        flex-wrap: wrap; /* 允许按钮换行 */
+        gap: 8px; /* 按钮之间的间隙 */
+        margin-bottom: 8px; /* 按钮组下方的间距 */
+    }
+
+    .button-group button, #startReviewBtn, #showAnswerBtn, #reviewFeedbackBtns button {
+      padding: 8px 15px; /* 调整按钮内边距 */
+      /* margin-right: 8px; (由gap替代) */
+      /* margin-bottom: 5px; (由gap替代) */
+      border: none; /* 移除边框，采用背景色区分 */
+      background-color: #007bff;
+      color: white;
+      border-radius: 6px; /* 更大的圆角 */
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+      flex-grow: 1; /* 让按钮在空间足够时填充 */
+    }
+    
+    .button-group button:only-child { /* 如果按钮组只有一个按钮，让它不完全拉伸 */
+        flex-grow: 0;
+    }
+
+
+    .button-group button:hover, #startReviewBtn:hover, #showAnswerBtn:hover, #reviewFeedbackBtns button:hover {
+      background-color: #0056b3; /* 加深悬停颜色 */
+    }
+
+    .button-group button:active, #startReviewBtn:active, #showAnswerBtn:active, #reviewFeedbackBtns button:active {
+      transform: scale(0.98); /* 点击时轻微缩小 */
+    }
+
+    /* 特殊按钮样式 */
+    .button-group button#quickSummarizeBtn { 
+      background-color: #6c757d; 
+    }
+    .button-group button#quickSummarizeBtn:hover {
+      background-color: #5a6268;
+    }
+
+    #reviewFeedbackBtns {
+        display: flex; /* 使用flex布局反馈按钮 */
+        gap: 8px; /* 按钮间距 */
+    }
+    #reviewFeedbackBtns button { /* 确保反馈按钮也应用flex grow */
+        flex-grow: 1;
+    }
+
+    #reviewFeedbackBtns button[data-feedback="easy"] { background-color: #28a745; }
+    #reviewFeedbackBtns button[data-feedback="easy"]:hover { background-color: #218838; }
+    #reviewFeedbackBtns button[data-feedback="medium"] { background-color: #ffc107; color: #212529; }
+    #reviewFeedbackBtns button[data-feedback="medium"]:hover { background-color: #e0a800; }
+    #reviewFeedbackBtns button[data-feedback="hard"] { background-color: #dc3545; }
+    #reviewFeedbackBtns button[data-feedback="hard"]:hover { background-color: #c82333; }
+
+
+    #popupStatus, #addWordStatus, #dataManagementStatus {
+      font-size: 13px;
+      min-height: 18px;
+      margin-top: 10px; /* 增加与上方元素的间距 */
+      padding: 8px; /* 增加内边距 */
+      border-radius: 6px; /* 圆角 */
+      text-align: center; /* 状态文本居中 */
+      transition: opacity 0.3s ease; /* 平滑过渡效果 */
+    }
+    /* 动态添加类来表示状态 */
+    .status-success { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; }
+    .status-error { color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; }
+    .status-info { color: #0c5460; background-color: #d1ecf1; border: 1px solid #bee5eb; }
+
+
+    #lastOperationResultText {
+      max-height: 75px; /* 增加最大高度 */
+      overflow-y: auto;
+      background-color: #e9ecef; /* 浅灰色背景 */
+      padding: 10px; /* 增加内边距 */
+      border-radius: 6px; /* 圆角 */
+      margin-top: 5px; /* 与上方“结果”标签的间距 */
+      margin-bottom: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #e9ecef; /* 更柔和的分割线 */
+      margin: 25px 0; /* 增加上下间距 */
+    }
+
+    #wordCard {
+      margin-top: 15px;
+      padding: 20px; /* 增加内边距 */
+      background-color: #ffffff;
+      border-radius: 8px;
+      min-height: 120px;
+      /* display: none; 由JS控制 */
+      box-shadow: 0 1px 5px rgba(0,0,0,0.07); /* 轻微阴影 */
+    }
+    #wordCard h4#reviewWord { /* 具体指定 reviewWord 的样式 */
+      font-size: 22px; /* 突出单词 */
+      color: #007bff;
+      font-weight: 600;
+      margin-bottom: 15px; /* 增加与下方按钮的间距 */
+    }
+
+    #reviewAnswer p {
+      font-size: 14px; /* 调整答案字体大小 */
+      margin-bottom: 8px;
+      line-height: 1.6; /* 调整行高 */
+    }
+    #reviewAnswer p strong {
+      color: #495057; /* 调整加粗文本颜色 */
+      font-weight: 600;
+    }
+    
+    #reviewAnswer p span { /* 让答案内容更易读 */
+        color: #212529;
+    }
+
+    a#openOptionsPage {
+      display: block;
+      padding: 12px 15px; /* 调整内边距 */
+      background-color: #17a2b8; /* 换个颜色，如信息蓝 */
+      color: white;
+      text-decoration: none;
+      border-radius: 6px; /* 圆角 */
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+      margin-top: 25px; /* 增加与上方元素的间距 */
+      transition: background-color 0.2s ease;
+    }
+    a#openOptionsPage:hover {
+      background-color: #138496; /* 加深悬停颜色 */
+    }
+
+    /* 数据管理区域的特殊调整 */
+    #dataManagementSection textarea#dataTextArea {
+      min-height: 120px; /* 稍微调大 */
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; /* 更现代的等宽字体栈 */
+      font-size: 12px;
+      background-color: #e9ecef;
+      border-color: #ced4da; /* 边框颜色调整 */
+    }
+    #dataManagementSection .button-group,
+    #dataManagementSection div[style*="margin-top: 10px;"] { /* 针对导入按钮行的容器 */
+        gap: 10px; /* 增加按钮和文件选择器之间的间距 */
+    }
+    #dataManagementSection .button-group button, 
+    #dataManagementSection #importDataBtn {
+        font-size: 13px;
+        padding: 6px 12px;
+        flex-grow: 0; /* 数据管理按钮不需要填充 */
+    }
+    #dataManagementSection #importFile {
+        font-size: 13px; /* 统一字体大小 */
+        padding: 5px; /* 增加一些内边距 */
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        flex-grow: 1; /* 让文件选择器填充可用空间 */
+    }
+  </style>
+</head>
+<body>
+  <h1>智能网页助手</h1>
+
+  <div class="section" id="quickActionSection">
+    <h3>快速操作</h3>
+    <textarea id="quickActionTextarea" placeholder="在此输入文本进行翻译/总结..."></textarea>
+    <div class="button-group">
+      <button id="quickTranslateBtn">翻译</button>
+      <button id="quickSummarizeBtn">总结 (模拟)</button>
+    </div>
+    <div id="popupStatus"></div>
+  </div>
+
+  <div class="section" id="addWordSection">
+    <h3>快速添加单词</h3>
+    <input type="text" id="addWordInput" placeholder="输入单词或短语...">
+    <div class="button-group">
+        <button id="addWordBtn">添加到单词本</button>
+    </div>
+    <div id="addWordStatus"></div>
+  </div>
+
+  <div class="section" id="lastOperationSection" style="display:none;">
+    <h3>最近操作: <span id="lastOpType" style="font-weight:normal;"></span></h3>
+    <p><strong>原文:</strong> <span id="lastOpOriginal"></span></p>
+    <p><strong>结果:</strong></p>
+    <div id="lastOpResultText"></div>
+  </div>
+
+  <hr>
+  <h3>单词复习</h3>
+  <div id="reviewSection" style="padding: 10px; border: 1px solid #eee; border-radius: 5px; margin-top:10px;">
+      <button id="startReviewBtn">开始/下一个复习</button>
+      <div id="wordCard" style="margin-top: 10px; padding: 15px; background-color: #f9f9f9; border-radius: 4px; min-height: 100px; display: none;">
+          <h4 id="reviewWord" style="margin-top:0; margin-bottom: 10px; font-size: 20px;"></h4>
+          <button id="showAnswerBtn">显示答案</button>
+          <div id="reviewAnswer" style="margin-top: 10px; display: none;">
+              <p><strong>定义:</strong> <span id="reviewDefinition">-</span></p>
+              <p><strong>例句:</strong> <span id="reviewExample">-</span></p>
+              <p style="font-size: 0.8em; color: #666;">添加日期: <span id="reviewAddedDate">-</span> | 复习次数: <span id="reviewCount">-</span></p>
+          </div>
+          <div id="reviewFeedbackBtns" style="margin-top: 15px; display: none;">
+              <button data-feedback="easy">认识 (Easy)</button>
+              <button data-feedback="medium">模糊 (Medium)</button>
+              <button data-feedback="hard">忘记 (Hard)</button>
+          </div>
+      </div>
+      <p id="noWordsToReview" style="display: none; color: #777;">太棒了！当前没有需要复习的单词。</p>
+  </div>
+
+  <div class="section" id="dataManagementSection" style="margin-top:15px;">
+    <h3>数据管理 (单词本)</h3>
+    <textarea id="dataTextArea" style="width: 95%; min-height: 100px; margin-bottom: 10px;" placeholder="词汇数据将以JSON格式显示在此处..."></textarea>
+    <div class="button-group">
+        <button id="saveDataBtn">保存修改</button>
+    </div>
+    <div style="margin-top: 10px;">
+        <input type="file" id="importFile" accept=".json" style="width: calc(100% - 100px); margin-right: 5px;">
+        <button id="importDataBtn" style="width: 90px;">导入数据</button>
+    </div>
+    <div id="dataManagementStatus" style="font-size: 12px; color: #777; min-height: 16px; margin-top: 5px;"></div>
+  </div>
+
+  <a href="#" id="openOptionsPage">打开数据中心</a>
+  
+  <!-- 未来可以在这里添加更多快捷功能 -->
+  <!-- 例如：显示最近一次翻译结果，手动输入翻译等 -->
+
+  <script src="popup.js"></script>
+</body>
+</html> 

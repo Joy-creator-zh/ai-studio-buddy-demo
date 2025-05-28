@@ -1,0 +1,38 @@
+[
+    {
+      "word": "example",
+      "definition": "a thing characteristic of its kind or illustrating a general rule.",
+      "exampleSentence": "This is an example sentence.",
+      "addedDate": "2024-01-15T08:00:00.000Z",
+      "reviewCount": 2,
+      "lastReviewDate": "2024-01-20T09:00:00.000Z",
+      "nextReviewDate": "2024-01-25T09:00:00.000Z",
+      "easinessFactor": 2.5,
+      "interval": 5,
+      "consecutiveCorrectAnswers": 2
+    },
+    {
+      "word": "ubiquitous",
+      "definition": "present, appearing, or found everywhere.",
+      "exampleSentence": "Mobile phones are now ubiquitous.",
+      "addedDate": "2024-03-10T14:20:00.000Z",
+      "reviewCount": 0,
+      "lastReviewDate": null,
+      "nextReviewDate": "2024-03-10T14:20:00.000Z",
+      "easinessFactor": 2.5,
+      "interval": 0,
+      "consecutiveCorrectAnswers": 0
+    },
+    {
+      "word": "ephemeral",
+      "definition": "lasting for a very short time.",
+      "exampleSentence": "Fashion is by nature ephemeral.",
+      "addedDate": "2024-03-28T11:05:30.000Z",
+      "reviewCount": 1,
+      "lastReviewDate": "2024-03-29T10:00:00.000Z",
+      "nextReviewDate": "2024-03-30T10:00:00.000Z",
+      "easinessFactor": 2.36,
+      "interval": 1,
+      "consecutiveCorrectAnswers": 0
+    }
+  ]

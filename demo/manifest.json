@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "智能网页助手",
+  "version": "0.1.0",
+  "description": "一个集翻译、总结、复制和单词记忆功能于一体的浏览器插件。",
+  "permissions": [
+    "contextMenus",
+    "storage",
+    "activeTab",
+    "scripting",
+    "clipboardWrite",
+    "notifications"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "action": {
+    "default_title": "智能网页助手",
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html"
+} 
